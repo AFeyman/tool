@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/weui.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        input {
+            display: block;
+            margin: 10px auto;
+            width: 80%;
+            line-height: 2.2;
+            padding: 0 10px;
+            border: 1px solid #666;
+        }
+
+        .weui_article h3 {
+            font-weight: bold;
+            border-top: 1px solid;
+            border-bottom: 1px solid;
+            padding: 0 5px;
+        }
+
+        .weui_article p {
+            padding: 0 5px;
+            margin-top: -1px;
+            /* border-top: 1px solid; */
+            /* border-bottom: 1px solid; */
+        }
+        #gj,#xj{
+            border: 1px solid #666;
+        }
+    </style>
+    <script src="./js/jquery.js"></script>
+    <script src="./js/js.js"></script>
+</head>
+
+<body ontouchstart="">
+    <h1>字典</h1>
+    <input type="text" placeholder="输入" id="qy" value="">
+    <a href="javascript:;" id="query" class="weui_btn weui_btn_primary">查询</a>
+    <div id="result" style="display:none;">
+        <div class="weui_cells">
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>笔画</p>
+                </div>
+                <div class="weui_cell_ft" id="bh">
+
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>部首</p>
+                </div>
+                <div class="weui_cell_ft" id="bs">
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>拼音</p>
+                </div>
+                <div class="weui_cell_ft" id="py">
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>五笔</p>
+                </div>
+                <div class="weui_cell_ft" id="wb">
+                </div>
+            </div>
+        </div>
+        <article class="weui_article" id="js">
+            <h1>解释</h1>
+            <section>
+                <div class="button_sp_area">
+                        <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary">概解</a>
+                        <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_default">详解</a>
+                </div>
+                <section id="gj">
+                    <h3></h3>
+                    <p></p>
+                </section>
+                <section id="xj" style="display:none;">
+                    <h3></h3>
+                    <p></p>
+                </section>
+            </section>
+        </article>
+    </div>
+    <script>
+        var $qy = document.getElementById('qy');
+        var $query = document.getElementById('query');
+        var $result = document.getElementById('result');
+
+        $query.ontouchstart = function () {
+            showLoading();
+            $.ajax({
+                url: 'http://v.juhe.cn/xhzd/query?word=' + $qy.value + '&dtype=json&key=b8f670b03cf5dd4cbd27adb1856fef29',
+                type: 'get',
+                dataType: 'jsonp',
+                success: function (res) {
+                    if (res.error_code == 0) {
+                        console.log(res);
+                        $('#result').show();
+                        $('#bh').text(res.result.bihua);
+                        $('#bs').text(res.result.bushou);
+                        $('#py').text(res.result.pinyin);
+                        $('#wb').text(res.result.wubi);
+                        $('#bh').text(res.result.bihua);
+                        var dom = '<h3>';
+                        for (var i = 0; i < res.result.jijie.length; i++) {
+                            // dom += res.result.jijie[i] == '' ? '<br>' : res.result.jijie[i];
+                            if (res.result.jijie[i].length > 4) {
+                                dom += '</h3><p>';
+                                dom += res.result.jijie[i];
+                            } else if (res.result.jijie[i] == '') {
+                                dom += '</p><h3>';
+                                dom += res.result.jijie[i];
+                            } else {
+                                dom += res.result.jijie[i] + '&nbsp;&nbsp;&nbsp;&nbsp;';
+                            }
+                        }
+                        $('#gj').html(dom);
+                        var dom2 = '<p>';
+                        for (var i = 0; i < res.result.xiangjie.length; i++) {
+                            // dom += res.result.jijie[i] == '' ? '<br>' : res.result.jijie[i];
+                            if (res.result.xiangjie[i] == '') {
+                                dom2 += '<br/><br/>';
+                                dom2 += res.result.xiangjie[i];
+                            } else {
+                                dom2 += res.result.xiangjie[i] + '&nbsp;&nbsp;';
+                            }
+                        }
+                        $('#xj').html(dom2+'</p>');
+                    } else {
+                        myAlert(res.reason, res.result == null ? '' : res.result);
+                    }
+                },
+                error: function (res) {
+                    myAlert(res);
+                },
+                complete: function () {
+                    hideLoading();
+                }
+            })
+        }
+        $('#js .button_sp_area a').on('touchstart', function () {
+            $(this).addClass('weui_btn_primary').removeClass('weui_btn_default').siblings().addClass('weui_btn_default').removeClass('weui_btn_primary');
+            if($(this).index()==0){
+                $('#gj').slideDown();
+                $('#xj').slideUp();
+            }else{
+                $('#xj').slideDown();
+                $('#gj').slideUp();
+            }
+        })
+    </script>
+</body>
+
+</html>
