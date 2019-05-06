@@ -53,3 +53,4 @@ function myAlert(t,p) {
 function closeAlert(){
     $('.weui_dialog_alert').hide();
 }
+$('body').append('<a href="https://afeyman.github.io/tool/" style="position:fixed;right:0;bottom:20px;opacity:.5;">返回首页，查看更多工具</a>');
