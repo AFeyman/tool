@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/weui.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        input {
+            display: block;
+            margin: 10px auto;
+            width: 80%;
+            line-height: 2.2;
+            padding: 0 10px;
+            border: 1px solid #666;
+        }
+
+        .weui_article h3 {
+            margin-top: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            border-bottom: 1px dashed;
+            padding: 0 5px;
+        }
+
+        .time {
+            font-size: 13px;
+            color: #999;
+            margin-left: 100px;
+        }
+
+        .weui_article p {
+            padding: 0 5px;
+            margin-top: -1px;
+            padding: 10px 0;
+            text-indent: 2em;
+        }
+
+        a.weui_btn1 {
+            position: fixed;
+            right: 0;
+            top: 3%;
+            opacity: .5;
+        }
+
+        a.weui_btn2 {
+            position: fixed;
+            right: 0;
+            opacity: .5;
+            top: 10%;
+        }
+    </style>
+    <script src="./js/jquery.js"></script>
+    <script src="./js/js.js"></script>
+</head>
+
+<body ontouchstart="">
+    <h1>笑话大全</h1>
+    <a href="javascript:;" class="weui_btn weui_btn1 weui_btn_primary">随机切换</a>
+    <!-- <a href="javascript:;" class="weui_btn weui_btn2 weui_btn_primary">最新</a> -->
+    <div id="result" style="display:none;">
+        <article class="weui_article" id="js">
+            <section>
+
+            </section>
+        </article>
+    </div>
+    <script>
+        var $qy = document.getElementById('qy');
+        var $query = document.getElementById('query');
+        var $result = document.getElementById('result');
+
+        $('a').on('click', function () {
+            var type = $(this).index();
+            var data = type == 1 ? { key: '8314620ddf309bbb69ce7852549fc2c9' } : {};
+            // console.log(data)
+            // var res = [{
+            //     content: "有一个老人，留着一把花白的大胡子。有一天，邻家小孩问他：“你这么长的胡子，晚上睡觉的时候，是把它放在被子里面还是外面呢？”从此以后老人开始失眠了……",
+            //     hashId: "E8EF69C0C3EE1E455FE7E357D7826A39",
+            //     unixtime: 1428292935
+            // }];
+            // console.log(new Date(1428292935*1000));
+            // console.log('1428292935'.length);
+            // console.log(String(new Date().getTime()).length);
+
+            // return;
+            $.ajax({
+                url: 'http://v.juhe.cn/joke/randJoke.php',
+                data: data,
+                type: 'get',
+                dataType: 'jsonp',
+                success: function (res) {
+                    var dom = '';
+                    res = res.result;
+                    for (var i = 0; i < res.length; i++) {
+                        dom += '<h3>' + (i + 1) + '、<span class="time">' + (new Date(res[i].unixtime * 1000).getFullYear()) + '/' +
+                            (new Date(res[i].unixtime * 1000).getMonth() + 1) + '/' +
+                            (new Date(res[i].unixtime * 1000).getDate()) + '</span></h3><p>' +
+                            res[i].content + '</p>';
+                    }
+                    $('#result').slideDown();
+                    $('#js section').html(dom);
+                }
+            })
+        })
+
+    </script>
+</body>
+
+</html>
