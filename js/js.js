@@ -29,8 +29,8 @@ function showLoading() {
 function hideLoading() {
     $('#loadingToast').hide();
 }
-function myAlert(t,p) {
-    if($('.weui_dialog_alert').length==0){
+function myAlert(t, p) {
+    if ($('.weui_dialog_alert').length == 0) {
         var dom = `
         <div class="weui_dialog_alert">
             <div class="weui_mask"></div>
@@ -50,7 +50,9 @@ function myAlert(t,p) {
     $('.weui_dialog_bd').html(p);
     $('.weui_dialog_alert').show();
 }
-function closeAlert(){
+function closeAlert() {
     $('.weui_dialog_alert').hide();
 }
-$('body').append('<a href="https://afeyman.github.io/tool/" style="position:fixed;right:0;bottom:20px;opacity:.5;">返回首页，查看更多工具</a>');
+$(function () {
+    $('body').append('<a href="https://afeyman.github.io/tool/" style="text-align:center;position:fixed;right:0;bottom:20px;opacity:.5;">返回首页<br/>查看更多工具</a>');
+})
