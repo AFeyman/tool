@@ -22,6 +22,7 @@
             $.ajax({
                 url: 'https://2019ncov.cetccloud.com/ncov/queryByNo',
                 type: 'post',
+                dataType:'json',
                 data: {
                     name: $('#name').val().trim(),
                     phone: $('#phone').val().trim(),
